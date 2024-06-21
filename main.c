@@ -22,8 +22,9 @@ int main() {
     printf("Starting program...\n");
 
     // Call the first method
+    char status = "on";
     checkDeviceState();
-
+    updateDeviceStatus(status);
     printf("Program finished.\n");
 
     return 0;
