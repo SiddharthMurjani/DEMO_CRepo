@@ -6,10 +6,8 @@ struct Device {
 
 union User {
     int userId;
-    struct {
-        int timeIn;
-        int timeout;
-    } session;
+    int timeIn;
+    int timeout;
 };
 
 struct Authorizor {
