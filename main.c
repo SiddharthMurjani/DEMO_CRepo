@@ -34,10 +34,10 @@ void checkDeviceState() {
 
     // Simulate checking device state
     int deviceOn = 1; // Assume device is on
+    processActiveDevice();
     if (deviceOn) {
         printf("Device is powered on.\n");
         // Call method to process active device
-        processActiveDevice();
     } else {
         printf("Device is powered off. Cannot proceed.\n");
     }
