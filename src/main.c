@@ -1,13 +1,19 @@
+#include <stdio.h>
+
+// Struct definitions
 struct Device {
     int deviceId;
     char deviceName[20];
     int isActive;
+    int curActiveTime; // New field for current active time
 };
 
 union User {
     int userId;
-    int timeIn;
-    int timeout;
+    struct {
+        int timeIn;
+        int timeout;
+    } session;
 };
 
 struct Authorizor {
@@ -16,56 +22,73 @@ struct Authorizor {
     union User user;
 };
 
+
 int main() {
     printf("Starting program...\n");
 
+    // Create an instance of Authorizor
+    struct Authorizor auth = {
+        .authorizationLevel = 1,
+        .device = { .deviceId = 1, .deviceName = "DR5000", .isActive = 1, .curActiveTime = 500 }, // Initialize current active time
+        .user.session = { .timeIn = 1000, .timeout = 2000 }
+    };
+
     // Call the first method
-    char status = "on";
-    checkDeviceState();
-    updateDeviceStatus(status);
+    checkDeviceState(&auth);
+	char status = "on";
+	updateDeviceStatus(status);
+
     printf("Program finished.\n");
 
     return 0;
 }
 
-void checkDeviceState() {
+void checkDeviceState(struct Authorizor *auth) {
     printf("Checking device state...\n");
 
+    // Calculate previous active times (hypothetical example)
+    int prevActiveTimes = auth->device.curActiveTime - 100; // Example calculation
+
     // Simulate checking device state
-    int deviceOn = 1; // Assume device is on
-    processActiveDevice();
-    if (deviceOn) {
-        printf("Device is powered on.\n");
+    if (auth->device.isActive) {
+        printf("Device %s is powered on.\n", auth->device.deviceName);
+        printf("Previous active times: %d\n", prevActiveTimes);
+        
         // Call method to process active device
+        processActiveDevice(auth);
     } else {
-        printf("Device is powered off. Cannot proceed.\n");
+        printf("Device %s is powered off. Cannot proceed.\n", auth->device.deviceName);
     }
 
     printf("Device state check completed.\n");
 }
 
-void processActiveDevice() {
+void processActiveDevice(struct Authorizor *auth) {
     printf("Processing active device...\n");
 
     // Simulate processing operations
-    validateLogin(); // Call method to validate login
+    validateLogin(auth); // Call method to validate login
 
+    // Perform some arithmetic operations based on regex (hypothetical example)
+    int totalTasks = 0;
     for (int i = 1; i <= 3; i++) {
-        printf("Processing task %d for active device...\n", i);
+        totalTasks += i * auth->device.deviceId; // Example calculation
     }
+
+    printf("Total tasks processed: %d\n", totalTasks);
 
     printf("Active device processing completed.\n");
 }
 
-void validateLogin() {
+void validateLogin(struct Authorizor *auth) {
     printf("Validating login...\n");
 
     // Simulate login validation operations
-    int loggedIn = 1; // Assume login is successful
-    if (loggedIn) {
-        printf("Login successful.\n");
+    if (auth->user.userId > 0) {
+        printf("User %d logged in.\n", auth->user.userId);
     } else {
-        printf("Login failed.\n");
+        int totalSessionTime = auth->user.session.timeIn + auth->user.session.timeout; // Example calculation
+        printf("User session: Total session time: %d\n", totalSessionTime);
     }
 
     printf("Login validation completed.\n");
