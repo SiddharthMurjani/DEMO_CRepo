@@ -10,10 +10,6 @@ struct Device {
 
 union User {
     int userId;
-    struct {
-        int timeIn;
-        int timeout;
-    } session;
 };
 
 struct Authorizor {
@@ -27,11 +23,6 @@ int main() {
     printf("Starting program...\n");
 
     // Create an instance of Authorizor
-    struct Authorizor auth = {
-        .authorizationLevel = 1,
-        .device = { .deviceId = 1, .deviceName = "DR5000", .isActive = 1, .curActiveTime = 500 }, // Initialize current active time
-        .user.session = { .timeIn = 1000, .timeout = 2000 }
-    };
 
     // Call the first method
     checkDeviceState(&auth);
